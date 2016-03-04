@@ -72,8 +72,16 @@
 					}
 				}, ajaxOpts));
 			},
-			showDetailView: function(url) {
-				window.location.href = url;
+			/**
+			 * @param String url
+			 * @param Boolean newWindow
+			 */
+			showDetailView: function(url, newWindow) {
+				if(newWindow) {
+					window.open(url);
+				} else {
+					window.location.href = url;
+				}
 			},
 			getItems: function() {
 				return this.find('.ss-gridfield-item');
@@ -272,7 +280,12 @@
 
 		$('.ss-gridfield .action-detail').entwine({
 			onclick: function() {
-				this.getGridField().showDetailView($(this).prop('href'));
+				// Use default behaviour on right click
+				if(e.which == 3) return false;
+				this.getGridField().showDetailView(
+					$(this).prop('href'),
+					(e.which == 2 || e.metaKey)
+				);
 				return false;
 			}
 		});
